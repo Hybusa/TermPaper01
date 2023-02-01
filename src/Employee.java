@@ -8,7 +8,7 @@ public class Employee {
     private final int employeeID;
 
     int department;
-    int salary;
+    float salary;
 
 
     public Employee(String firstName, String middleName, String lastName, int department, int salary) {
@@ -41,7 +41,7 @@ public class Employee {
         return department;
     }
 
-    public int getSalary() {
+    public float getSalary() {
         return salary;
     }
 
@@ -56,7 +56,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return String.format("Name: %s %s %s%n ID: %d%n Department: %d%n Salary: %d%n%n",
+        return String.format("Name: %s %s %s%n ID: %d%n Department: %d%n Salary: %f%n%n",
                 this.lastName,
                 this.firstName,
                 this.middleName,
