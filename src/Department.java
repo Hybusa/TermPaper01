@@ -12,18 +12,16 @@ public enum Department {
 
     private static final Random RNG = new Random();
 
-    public static Department getRandomDepartment()  {
+    public static Department getRandomDepartment() {
         Department[] departments = values();
         return departments[RNG.nextInt(departments.length)];
     }
-    Department(String string)
-    {
 
-        this.string= string;
+    Department(String string) {
+        this.string = string;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return this.string;
     }
 

@@ -19,6 +19,18 @@ public class Employee {
         this.employeeID = ID;
         ID++;
     }
+
+    public Employee(Employee other)
+    {
+        this.firstName = other.firstName;
+        this.lastName = other.lastName;
+        this.department = other.department;
+        this.salary = other.salary;
+        this.employeeID = other.employeeID;
+    }
+
+
+
     //Getters
     public String getFirstName() {
         return firstName;
@@ -36,7 +48,7 @@ public class Employee {
         return department;
     }
 
-    public  double getSalary() {
+    public double getSalary() {
         return salary;
     }
 
@@ -74,6 +86,7 @@ public class Employee {
                 this.department,
                 this.salary);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

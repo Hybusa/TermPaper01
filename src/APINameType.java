@@ -4,13 +4,12 @@ public enum APINameType {
     LAST_NAME("lastname");
 
     public final String value;
-    APINameType(String string)
-    {
-        this.value =  string;
+
+    APINameType(String string) {
+        this.value = string;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return this.value;
     }
 }
