@@ -11,18 +11,27 @@ import java.util.Optional;
 
 public class Main {
     static final String API_KEY = "34e61b4b4a5641aea9f2a87773283c46";
+    static final int APINum = 50;
 
     public static void main(String[] args) {
 
         EmployeeBook book1 = new EmployeeBook();
-
-        for (int i = 0; i < 10; i++) {
-            book1.addEmployee(new Employee(getRandomFullName(APINameType.FULL_NAME),
+        JSONArray jArray = getRandomFullName(APINameType.FULL_NAME, APINum);
+        for (int i = 0; i < APINum; i++) {
+            book1.addEmployee(new Employee(jArray.getString(i),
                     Department.getRandomDepartment(),
                     kuz.getRandomIntInRange(100_000, 500_000)));
         }
 
         book1.printAllEmployees();
+
+        /*
+        book1.addEmployee(null);
+        System.out.println(book1.getAvarageSalary(Department.DESIGN));
+        book1.printAllEmployees(Department.DESIGN);
+        System.out.println(book1.getPayrollExpense());
+*/
+        //book1.getMinSalary();
     /*
             Employee employee=null;
             if(book1.getEmployeeByID(5).isPresent())
@@ -87,17 +96,16 @@ public class Main {
 
     }
 
-    public static String getRandomFullName(APINameType type) {
+    public static JSONArray getRandomFullName(APINameType type, int i) {
 
         URI uri;
         try {
-            uri = new URI("https://randommer.io/api/Name?nameType=" + type + "&quantity=1");
+            uri = new URI("https://randommer.io/api/Name?nameType=" + type + "&quantity="+i);
         } catch (URISyntaxException e) {
             throw new RuntimeException("Wrong URI format");
         }
 
-        JSONArray jArray = formAndSendHTTPRequest(uri);
-        return jArray.getString(0);
+        return formAndSendHTTPRequest(uri);
     }
 
     private static JSONArray formAndSendHTTPRequest(URI uri) {
@@ -115,7 +123,7 @@ public class Main {
         return new JSONArray(getResponse.body());
     }
 
-    public static <T> void printOptional(Optional<T> object)
+    public static void printOptional(Optional object)
     {
         if(object.isPresent())
             System.out.println(object.get());
