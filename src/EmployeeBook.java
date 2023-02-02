@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Random;
 
 public class EmployeeBook {
@@ -131,14 +132,14 @@ public class EmployeeBook {
         }
     }
 
-/*    public Employee getMinSalaryFromDepartment(int department) {
+    public Employee getMinSalaryFromDepartment(int department) {
         Employee[] sortedEmployees = sortCopyOfArray();
         for (Employee employee : sortedEmployees) {
             if (employee.department == department)
                 return employee;
         }
-        return ;
-    }*/
+        return null;
+    }
 
     public Employee getMaxSalaryFromDepartment(int department) {
         Employee[] sortedEmployees = sortCopyOfArray();
@@ -192,13 +193,14 @@ public class EmployeeBook {
         }
     }
 
-   /* public Employee getEmployeeByID(int id) {
+    public Optional<Employee> getEmployeeByID(int id) {
+        Employee returnEmployee = null;
         for (Employee employee : employees) {
             if (employee.getEmployeeID() == id)
-                return employee;
+                returnEmployee = employee;
         }
-        return null;
-    }*/
+        return Optional.ofNullable(returnEmployee);
+    }
 
     private int getRandomIntInRange(int min, int max) {
         Random random = new Random();

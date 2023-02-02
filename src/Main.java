@@ -35,6 +35,12 @@ public class Main {
 
         book1.printAllEmployees();
 
+        if(book1.getEmployeeByID(1).isPresent())
+            System.out.println("Employee found");
+        else
+            System.out.println("Employee not found");
+
+
     }
 
     public static int getRandomIntInRange(int min, int max) {
