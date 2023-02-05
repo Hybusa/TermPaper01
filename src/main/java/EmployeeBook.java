@@ -107,7 +107,7 @@ public class EmployeeBook {
         return true;
     }
 
-    public boolean changeDepartmentByName(String fullName, Department newDepartment) {
+    private boolean changeDepartmentByName(String fullName, Department newDepartment) {
         try {
             employeeHashMap.values().stream()
                     .filter(employee -> employee.getEmployeeFullName().equals(fullName))
@@ -132,7 +132,7 @@ public class EmployeeBook {
 
     public boolean indexSalary(Department department, int indexPercent) {
         if (indexSalaryForDepartment(department, indexPercent)) {
-            System.out.println("Salary for department " + department + "was increased by" + indexPercent + "%");
+            System.out.println("Salary for department " + department + "was increased by " + indexPercent + "%");
             return true;
         }
         return false;
@@ -140,22 +140,20 @@ public class EmployeeBook {
 
 
     private boolean indexSalaryForDepartment(Department department, int indexPercent) {
-        try {
+        if (employeeHashMap.values().stream().anyMatch(employee -> employee.getDepartment() == department)) {
             employeeHashMap.values().stream()
                     .filter(employee -> employee.getDepartment() == department)
                     .forEach(employee -> employee.setSalary(indexSalaryByPercent(employee.getSalary(), indexPercent)));
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element " + e.getLocalizedMessage());
+            System.out.println("No such element");
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public Optional<List<Employee>> getAllEmployees()
-    {
-        if(employeeHashMap.isEmpty())
-        {
+    public Optional<List<Employee>> getAllEmployees() {
+        if (employeeHashMap.isEmpty()) {
             System.out.println("The book is empty");
-            return Optional.ofNullable(employeeHashMap.values().stream().collect(Collectors.toList()));
+            return Optional.ofNullable(null);
         }
         return Optional.ofNullable(employeeHashMap.values().stream().collect(Collectors.toList()));
     }
@@ -258,13 +256,10 @@ public class EmployeeBook {
             System.out.println("No employees in the Book");
             return;
         }
-        try {
-            employeeHashMap.values().stream()
-                    .filter(employee -> employee.getSalary() < salaryCeiling)
-                    .forEach(System.out::println);
-        } catch (NoSuchElementException e) {
-            System.out.println("No such elements" + e.getLocalizedMessage());
-        }
+        employeeHashMap.values().stream()
+                .filter(employee -> employee.getSalary() < salaryCeiling)
+                .forEach(System.out::println);
+
     }
 
     public void printEmployeesAboveSalary(int salaryFloor) {
@@ -272,9 +267,9 @@ public class EmployeeBook {
             System.out.println("No employees in the Book");
             return;
         }
-            employeeHashMap.values().stream()
-                    .filter(employee -> employee.getSalary() >= salaryFloor)
-                    .forEach(System.out::println);
+        employeeHashMap.values().stream()
+                .filter(employee -> employee.getSalary() >= salaryFloor)
+                .forEach(System.out::println);
     }
 
     public void printAllEmployees() {
@@ -282,8 +277,8 @@ public class EmployeeBook {
             System.out.println("No employees in the Book");
             return;
         }
-            for (Employee employee : employeeHashMap.values())
-                System.out.println(employee);
+        for (Employee employee : employeeHashMap.values())
+            System.out.println(employee);
     }
 
     public void printAllEmployees(Department department) {
@@ -297,9 +292,9 @@ public class EmployeeBook {
 
     //Privates
     private void printAllEmployeesFromDepartment(Department department) {
-               employeeHashMap.values().stream()
-                    .filter(employee -> employee.getDepartment() == department)
-                    .forEach(System.out::println);
+        employeeHashMap.values().stream()
+                .filter(employee -> employee.getDepartment() == department)
+                .forEach(System.out::println);
     }
 
     private double indexSalaryByPercent(double salary, int percent) {
