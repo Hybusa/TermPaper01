@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -96,8 +95,8 @@ class EmployeeBookTest {
         testBook.addEmployee(new Employee("Test Fox", Department.PRODUCTION, 250_000));
         testBook.addEmployee(new Employee("Test Alex", Department.RELEASE, 260_000));
 
-        Optional<List<Employee>> optionalEmployees = testBook.getAllEmployees();
-        ArrayList<Employee> employeesBefore = new ArrayList<>(optionalEmployees.get());
+       List<Employee> optionalEmployees = testBook.getAllEmployees();
+        ArrayList<Employee> employeesBefore = new ArrayList<>(optionalEmployees);
         double[] salariesBefore = new double[employeesBefore.size()];
         for(int i = 0; i < employeesBefore.size(); i++)
         {
@@ -107,7 +106,7 @@ class EmployeeBookTest {
         assertThat(testBook.indexSalary(12)).isTrue();
 
         optionalEmployees = testBook.getAllEmployees();
-        ArrayList<Employee> employeesAfter = new ArrayList<>(optionalEmployees.get());
+        ArrayList<Employee> employeesAfter = new ArrayList<>(optionalEmployees);
 
         double[] salariesAfter = new double[employeesAfter.size()];
         for(int i = 0; i < employeesAfter.size(); i++)
@@ -134,8 +133,8 @@ class EmployeeBookTest {
         testBook.addEmployee(new Employee("Fox Test", Department.PRODUCTION, 250_000));
         testBook.addEmployee(new Employee("Alex Test", Department.RELEASE, 260_000));
 
-        Optional<List<Employee>> optionalEmployees = testBook.getAllEmployees();
-        ArrayList<Employee> employeesBefore = new ArrayList<>(optionalEmployees.get());
+        List<Employee> optionalEmployees = testBook.getAllEmployees();
+        ArrayList<Employee> employeesBefore = new ArrayList<>(optionalEmployees);
 
         double[] salariesBefore = new double[employeesBefore.size()];
         for(int i = 0; i < employeesBefore.size(); i++)
@@ -146,7 +145,7 @@ class EmployeeBookTest {
         assertThat(testBook.indexSalary(Department.DEVELOPMENT,12)).isTrue();
 
         optionalEmployees = testBook.getAllEmployees();
-        ArrayList<Employee> employeesAfter = new ArrayList<>(optionalEmployees.get());
+        ArrayList<Employee> employeesAfter = new ArrayList<>(optionalEmployees);
 
         double[] salariesAfter = new double[employeesAfter.size()];
         for(int i = 0; i < employeesAfter.size(); i++)
@@ -172,7 +171,7 @@ class EmployeeBookTest {
     @org.junit.jupiter.api.Test
     void testGetAllEmployees() {
 
-        assertThat(testBook.getAllEmployees().isPresent()).isFalse();
+        assertThat(testBook.getAllEmployees()).isEmpty();
 
 
         Employee Jane = new Employee("Jane Test", Department.MANAGEMENT, 210_000);
@@ -201,9 +200,7 @@ class EmployeeBookTest {
         newListEmployees.add(Fox);
         newListEmployees.add(Alex);
 
-        assertThat(testBook.getAllEmployees().isPresent()).isTrue();
-
-        ArrayList<Employee> gotListEmployees = new ArrayList<>(testBook.getAllEmployees().get());
+        ArrayList<Employee> gotListEmployees = new ArrayList<>(testBook.getAllEmployees());
 
         for (Employee newEmployee : newListEmployees) {
             Employee tmp = new Employee(newEmployee);

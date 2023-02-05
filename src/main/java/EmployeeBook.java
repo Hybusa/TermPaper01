@@ -1,18 +1,19 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class EmployeeBook {
     private final Map<Integer, Employee> employeeHashMap = new HashMap<>();
 
 
     public boolean addEmployee(Employee employee) {
-        try {
-            employeeHashMap.put(employee.getEmployeeID(), employee);
-            System.out.println("Employee Added");
-        } catch (NullPointerException e) {
-            System.out.println("Employee can't be equal to " + e.getLocalizedMessage());
+
+        if (employee == null) {
+            System.out.println("Employee can't be equal to null");
             return false;
         }
+
+        employeeHashMap.put(employee.getEmployeeID(), employee);
+        System.out.println("Employee Added");
+
         return true;
     }
 
@@ -150,12 +151,11 @@ public class EmployeeBook {
         return false;
     }
 
-    public Optional<List<Employee>> getAllEmployees() {
+    public List<Employee> getAllEmployees() {
         if (employeeHashMap.isEmpty()) {
             System.out.println("The book is empty");
-            return Optional.ofNullable(null);
         }
-        return Optional.ofNullable(employeeHashMap.values().stream().collect(Collectors.toList()));
+        return new ArrayList<>(employeeHashMap.values());
     }
 
 
@@ -165,13 +165,8 @@ public class EmployeeBook {
     }
 
     public Optional<Employee> getMinSalary() {
-        try {
-            return Optional.ofNullable(employeeHashMap.values().stream()
-                    .min(Comparator.comparing(Employee::getSalary)).orElseThrow(NoSuchElementException::new));
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element " + e.getLocalizedMessage());
-            return Optional.ofNullable(null);
-        }
+        return employeeHashMap.values().stream()
+                .min(Comparator.comparing(Employee::getSalary));
     }
 
     public Optional<Employee> getMinSalary(Department department) {
@@ -179,14 +174,8 @@ public class EmployeeBook {
     }
 
     public Optional<Employee> getMaxSalary() {
-        try {
-            return Optional.ofNullable(employeeHashMap.values().stream()
-                    .max(Comparator.comparing(Employee::getSalary)).orElseThrow(NoSuchElementException::new));
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element " + e.getLocalizedMessage());
-            return Optional.ofNullable(null);
-        }
-
+        return employeeHashMap.values().stream()
+                .max(Comparator.comparing(Employee::getSalary));
     }
 
     public Optional<Employee> getMaxSalary(Department department) {
@@ -213,36 +202,26 @@ public class EmployeeBook {
             System.out.println("Book is empty");
             return 0d;
         }
-        Double avarage = employeeHashMap.values().stream().filter(employee -> employee.getDepartment() == department)
-                .mapToDouble(Employee::getSalary).sum();
-        avarage /= employeeHashMap.values().stream().filter(employee -> employee.getDepartment() == department).count();
-        if (avarage.isNaN()) {
+        OptionalDouble avarage = employeeHashMap.values().stream()
+                .filter(employee -> employee.getDepartment() == department)
+                .mapToDouble(Employee::getSalary).average();
+        if (avarage.isEmpty()) {
             return 0d;
         }
-        return avarage;
+        return avarage.getAsDouble();
     }
 
 
     private Optional<Employee> getMinSalaryFromDepartmentWithStream(Department department) {
-        try {
-            return Optional.ofNullable(employeeHashMap.values().stream()
-                    .filter(employee -> employee.getDepartment() == department)
-                    .min(Comparator.comparing(Employee::getSalary)).orElseThrow(NoSuchElementException::new));
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element " + e.getLocalizedMessage());
-            return null;
-        }
+        return employeeHashMap.values().stream()
+                .filter(employee -> employee.getDepartment() == department)
+                .min(Comparator.comparing(Employee::getSalary));
     }
 
     private Optional<Employee> getMaxSalaryEmployeeFromDepartmentWithStream(Department department) {
-        try {
-            return Optional.ofNullable(employeeHashMap.values().stream()
-                    .filter(employee -> employee.getDepartment() == department)
-                    .max(Comparator.comparing(Employee::getSalary)).orElseThrow(NoSuchElementException::new));
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element " + e.getLocalizedMessage());
-            return null;
-        }
+        return employeeHashMap.values().stream()
+                .filter(employee -> employee.getDepartment() == department)
+                .max(Comparator.comparing(Employee::getSalary));
     }
 
 

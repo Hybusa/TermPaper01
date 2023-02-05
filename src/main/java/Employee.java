@@ -5,7 +5,7 @@ public class Employee {
     private static int ID;
     private final String firstName;
     private final String lastName;
-    private final Integer employeeID;
+    private final int employeeID;
     private Department department;
     private double salary;
 
@@ -67,15 +67,6 @@ public class Employee {
         this.department = department;
     }
 
-
-    public void printIDFullNameSalary() {
-        System.out.printf("%d%n%s%n%f%n",
-                this.getEmployeeID(),
-                getEmployeeFullName(),
-                this.getSalary());
-    }
-
-
     //Overrides
     @Override
     public String toString() {
@@ -92,7 +83,7 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return employeeID.equals(employee.employeeID);
+        return employeeID == employee.employeeID;
     }
 
     @Override
