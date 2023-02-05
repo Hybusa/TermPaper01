@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeBook {
     private final Map<Integer, Employee> employeeHashMap = new HashMap<>();
@@ -19,30 +20,24 @@ public class EmployeeBook {
         if (removeEmployeeById(employee.getEmployeeID())) {
             System.out.println("Employee Removed");
             return true;
-        } else {
-            System.out.println("No such employee");
-            return false;
         }
+        return false;
     }
 
     public boolean removeEmployee(int id) {
         if (removeEmployeeById(id)) {
             System.out.println("Employee Removed");
             return true;
-        } else {
-            System.out.println("No such employee");
-            return false;
         }
+        return false;
     }
 
     public boolean removeEmployee(String fullName) {
         if (removeEmployeeByName(fullName)) {
             System.out.println("Employee(s) removed");
             return true;
-        } else {
-            System.out.println("No such employee");
-            return false;
         }
+        return false;
     }
 
     private boolean removeEmployeeById(int id) {
@@ -153,6 +148,16 @@ public class EmployeeBook {
             System.out.println("No such element " + e.getLocalizedMessage());
         }
         return true;
+    }
+
+    public Optional<List<Employee>> getAllEmployees()
+    {
+        if(employeeHashMap.isEmpty())
+        {
+            System.out.println("The book is empty");
+            return Optional.ofNullable(employeeHashMap.values().stream().collect(Collectors.toList()));
+        }
+        return Optional.ofNullable(employeeHashMap.values().stream().collect(Collectors.toList()));
     }
 
 

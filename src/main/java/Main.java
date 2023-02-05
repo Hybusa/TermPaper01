@@ -1,6 +1,5 @@
 import kuzLib.*;
 import org.json.JSONArray;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,7 +10,7 @@ import java.util.Optional;
 
 public class Main {
     static final String API_KEY = "34e61b4b4a5641aea9f2a87773283c46";
-    static final int APINum = 50;
+    static final int APINum = 1;
 
     public static void main(String[] args) {
 
@@ -24,22 +23,35 @@ public class Main {
         }
 
         book1.printAllEmployees();
+        /*
 
+                Optional<List<Employee>> allEmployees = book1.getAllEmployees();
+                if(allEmployees.isPresent())
+                {
+                    System.out.println(allEmployees.get());
+                }
+                else
+                {
+                    System.out.println("No employees");
+                }
+
+        */
         /*
         book1.addEmployee(null);
         System.out.println(book1.getAvarageSalary(Department.DESIGN));
         book1.printAllEmployees(Department.DESIGN);
         System.out.println(book1.getPayrollExpense());
+
+         book1.getMinSalary();
 */
-        //book1.getMinSalary();
-    /*
+        /*
             Employee employee=null;
             if(book1.getEmployeeByID(5).isPresent())
             {
                 employee =  new Employee(book1.getEmployeeByID(5).get());
             }*/
         //Checking removers
-    /*
+        /*
 
 
             book1.removeEmployee(employee.getEmployeeFullName());
@@ -54,7 +66,7 @@ public class Main {
 
            */
         //Checking changers
-    /*        System.out.println("_________________________________________");
+        /*        System.out.println("_________________________________________");
             book1.changeSalaryByName(employee.getEmployeeFullName(),190_000);
             book1.printAllEmployees();
             System.out.println("_________________________________________");
@@ -79,15 +91,14 @@ public class Main {
         System.out.println("_________________________________________");
         book1.indexSalary(Department.DEVELOPMENT, 10);
         book1.printAllEmployees(Department.DEVELOPMENT);*/
-
-    /*
+        /*
         System.out.println(book1.getPayrollExpense());
         printOptional(book1.getMinSalary());
         printOptional(book1.getMaxSalary());
         printOptional(book1.getMaxSalary(Department.DEVELOPMENT));
         System.out.println(book1.getAvarageSalary());
         System.out.println(book1.getAvarageSalary(Department.DESIGN));*/
-/*
+        /*
 
         book1.printEmployeesBelowSalary(200_000);
         System.out.println("_______________________________");

@@ -54,8 +54,8 @@ public class Employee {
 
     public String getEmployeeFullName() {
         return String.format("%s %s",
-                this.getLastName(),
-                this.getFirstName());
+                this.getFirstName(),
+                this.getLastName());
     }
 
     //Setters
