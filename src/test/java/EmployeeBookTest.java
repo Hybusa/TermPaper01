@@ -18,6 +18,18 @@ class EmployeeBookTest {
     }
 
     @org.junit.jupiter.api.Test
+    void testCreateEmployeeInTheBook()
+    {
+        Employee employee = testBook.createEmployeeInTheBook(testEmployee.getEmployeeFullName(),
+                testEmployee.getDepartment(),
+                testEmployee.getSalary());
+        assertThat(testBook.getAllEmployees().get(0)).isEqualTo(employee);
+        assertThat(employee.getEmployeeFullName()).isEqualTo(testEmployee.getEmployeeFullName());
+        assertThat(employee.getDepartment()).isEqualTo(testEmployee.getDepartment());
+        assertThat(employee.getSalary()).isEqualTo(testEmployee.getSalary());
+    }
+
+    @org.junit.jupiter.api.Test
     void testRemoveEmployeeById() {
 
         testBook.addEmployee(testEmployee);
@@ -234,6 +246,20 @@ class EmployeeBookTest {
     }
 
     @org.junit.jupiter.api.Test
+    void testGetMinSalaryByDepartment() {
+
+        assertThat(testBook.getMinSalary().isPresent()).isFalse();
+
+        testBook.addEmployee(testEmployee);
+        testBook.addEmployee(new Employee("Jane Test", Department.DESIGN, 310_000));
+        testBook.addEmployee(new Employee("Lee Test", Department.DEVELOPMENT, 220_000));
+
+        assertThat(testBook.getMinSalary(Department.DESIGN).isPresent()).isTrue();
+
+        assertThat(testBook.getMinSalary(Department.DESIGN).get().getSalary()).isEqualTo(200_000);
+    }
+
+    @org.junit.jupiter.api.Test
     void testGetMaxSalary() {
         assertThat(testBook.getMaxSalary().isPresent()).isFalse();
 
@@ -247,6 +273,19 @@ class EmployeeBookTest {
     }
 
     @org.junit.jupiter.api.Test
+    void testGetMaxSalaryByDepartment() {
+        assertThat(testBook.getMaxSalary().isPresent()).isFalse();
+
+        testBook.addEmployee(testEmployee);
+        testBook.addEmployee(new Employee("Jane Test", Department.DESIGN, 310_000));
+        testBook.addEmployee(new Employee("Lee Test", Department.DEVELOPMENT, 220_000));
+
+        assertThat(testBook.getMaxSalary(Department.DESIGN).isPresent()).isTrue();
+
+        assertThat(testBook.getMaxSalary(Department.DESIGN).get().getSalary()).isEqualTo(310_000);
+    }
+
+    @org.junit.jupiter.api.Test
     void testGetAvarageSalary() {
         assertThat(testBook.getAvarageSalary()).isEqualTo(0);
 
@@ -256,6 +295,17 @@ class EmployeeBookTest {
 
         assertThat(testBook.getAvarageSalary()).isEqualTo(210_000);
     }
+    @org.junit.jupiter.api.Test
+    void testGetAvarageSalaryByDepartment() {
+        assertThat(testBook.getAvarageSalary()).isEqualTo(0);
+
+        testBook.addEmployee(testEmployee);
+        testBook.addEmployee(new Employee("Jane Test", Department.DEVELOPMENT, 240_000));
+        testBook.addEmployee(new Employee("Lee Test", Department.DEVELOPMENT, 220_000));
+
+        assertThat(testBook.getAvarageSalary(Department.DEVELOPMENT)).isEqualTo(230_000);
+    }
+
 
     @org.junit.jupiter.api.Test
     void testGetEmployeeByID() {
@@ -297,4 +347,14 @@ class EmployeeBookTest {
 
         testBook.printAllEmployees();
     }
+
+    @org.junit.jupiter.api.Test
+    void testPrintAllEmployeesByDepartment() {
+        testBook.addEmployee(testEmployee);
+        testBook.addEmployee(new Employee("Jane Test", Department.MANAGEMENT, 300_000));
+        testBook.addEmployee(new Employee("Lee Test", Department.DEVELOPMENT, 500_000));
+
+        testBook.printAllEmployees(Department.DEVELOPMENT);
+    }
+
 }

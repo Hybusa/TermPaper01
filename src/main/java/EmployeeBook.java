@@ -1,9 +1,10 @@
 import java.util.*;
+import java.util.stream.Stream;
 
 public class EmployeeBook {
     private final Map<Integer, Employee> employeeHashMap = new HashMap<>();
 
-
+    //Adders Creators
     public boolean addEmployee(Employee employee) {
 
         if (employee == null) {
@@ -15,6 +16,13 @@ public class EmployeeBook {
         System.out.println("Employee Added");
 
         return true;
+    }
+
+    public Employee createEmployeeInTheBook(String fullName, Department department, double salary)
+    {
+        Employee employee = new Employee(fullName,department,salary);
+        this.addEmployee(employee);
+        return employee;
     }
 
     public boolean removeEmployee(Employee employee) {
@@ -50,75 +58,65 @@ public class EmployeeBook {
     }
 
     private boolean removeEmployeeByName(String fullName) {
-
-        ArrayList<Integer> ids = new ArrayList<>();
         if (employeeHashMap.isEmpty()) {
             System.out.println("The book is Empty");
             return false;
         }
-        try {
-            if (employeeHashMap.values().stream().anyMatch(employee -> employee.getEmployeeFullName().equals(fullName))) {
-                employeeHashMap.values().stream()
-                        .filter(employee -> employee.getEmployeeFullName().equals(fullName))
-                        .forEach(employee -> ids.add(employee.getEmployeeID()));
-            }
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element " + e.getLocalizedMessage());
+
+        if(!employeeHashMap.entrySet().removeIf(entry -> entry.getValue().getEmployeeFullName().equals(fullName))) {
+            System.out.println("No such element");
             return false;
-        }
-        if (ids.size() == 0)
-            return false;
-        for (int i : ids) {
-            if (!employeeHashMap.remove(i, employeeHashMap.get(i)))
-                return false;
         }
         return true;
     }
 
 
-    //Changers
+    //Change salary by name
 
     public boolean changeSalary(String fullName, double newSalary) {
         if (changeSalaryByName(fullName, newSalary)) {
             System.out.println("Salary for " + fullName + " changed to " + newSalary);
             return true;
         }
+        System.out.println("No such element");
         return false;
 
     }
 
-    public boolean changeDepartment(String fullName, Department newDepartment) {
-        if (changeDepartmentByName(fullName, newDepartment)) {
-            System.out.println("Department for " + fullName + " changed to " + newDepartment);
+    private boolean changeSalaryByName(String fullName, double newSalary) {
+        if(checkIfNameIsInTheBook(fullName)) {
+            employeeHashMap.values().stream()
+                    .filter(employee -> employee.getEmployeeFullName().equals(fullName))
+                    .forEach(employee -> employee.setSalary(newSalary));
             return true;
         }
         return false;
     }
 
 
-    private boolean changeSalaryByName(String fullName, double newSalary) {
-        try {
-            employeeHashMap.values().stream()
-                    .filter(employee -> employee.getEmployeeFullName().equals(fullName))
-                    .findAny().orElseThrow(NoSuchElementException::new).setSalary(newSalary);
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element" + e.getLocalizedMessage());
-            return false;
+    //Change Department
+
+    public boolean changeDepartment(String fullName, Department newDepartment) {
+        if (changeDepartmentByName(fullName, newDepartment)) {
+            System.out.println("Department for " + fullName + " changed to " + newDepartment);
+            return true;
         }
-        return true;
+        System.out.println("No such element");
+        return false;
     }
 
     private boolean changeDepartmentByName(String fullName, Department newDepartment) {
-        try {
-            employeeHashMap.values().stream()
-                    .filter(employee -> employee.getEmployeeFullName().equals(fullName))
-                    .findAny().orElseThrow(NoSuchElementException::new).setDepartment(newDepartment);
-        } catch (NoSuchElementException e) {
-            System.out.println("No such element" + e.getLocalizedMessage());
-            return false;
-        }
-        return true;
+       if(checkIfNameIsInTheBook(fullName)) {
+           employeeHashMap.values().stream()
+                   .filter(employee -> employee.getEmployeeFullName().equals(fullName))
+                   .forEach(employee -> employee.setDepartment(newDepartment));
+           return true;
+       }
+        return false;
     }
+
+
+    //Index salary
 
     public boolean indexSalary(int indexPercent) {
         if (employeeHashMap.isEmpty()) {
@@ -136,28 +134,28 @@ public class EmployeeBook {
             System.out.println("Salary for department " + department + "was increased by " + indexPercent + "%");
             return true;
         }
+        System.out.println("No such element");
         return false;
     }
 
 
     private boolean indexSalaryForDepartment(Department department, int indexPercent) {
         if (employeeHashMap.values().stream().anyMatch(employee -> employee.getDepartment() == department)) {
-            employeeHashMap.values().stream()
-                    .filter(employee -> employee.getDepartment() == department)
+            getDepartmentEmplyeesStream(department)
                     .forEach(employee -> employee.setSalary(indexSalaryByPercent(employee.getSalary(), indexPercent)));
-            System.out.println("No such element");
             return true;
         }
         return false;
     }
 
+
+    //Get info
     public List<Employee> getAllEmployees() {
         if (employeeHashMap.isEmpty()) {
             System.out.println("The book is empty");
         }
         return new ArrayList<>(employeeHashMap.values());
     }
-
 
     //Get methods
     public double getPayrollExpense() {
@@ -168,11 +166,17 @@ public class EmployeeBook {
         return employeeHashMap.values().stream()
                 .min(Comparator.comparing(Employee::getSalary));
     }
-
+            //Get mins
     public Optional<Employee> getMinSalary(Department department) {
         return getMinSalaryFromDepartmentWithStream(department);
     }
 
+    private Optional<Employee> getMinSalaryFromDepartmentWithStream(Department department) {
+        return getDepartmentEmplyeesStream(department)
+                .min(Comparator.comparing(Employee::getSalary));
+    }
+
+            //Get maxes
     public Optional<Employee> getMaxSalary() {
         return employeeHashMap.values().stream()
                 .max(Comparator.comparing(Employee::getSalary));
@@ -182,6 +186,13 @@ public class EmployeeBook {
         return getMaxSalaryEmployeeFromDepartmentWithStream(department);
     }
 
+    private Optional<Employee> getMaxSalaryEmployeeFromDepartmentWithStream(Department department) {
+        return getDepartmentEmplyeesStream(department)
+                .max(Comparator.comparing(Employee::getSalary));
+    }
+
+
+            //Get Averages
     public double getAvarageSalary() {
         if (!employeeHashMap.isEmpty()) {
             return getPayrollExpense() / employeeHashMap.size();
@@ -196,14 +207,12 @@ public class EmployeeBook {
         return 0;
     }
 
-
     private Double getAvarageSalaryFromDepartmentWithStream(Department department) {
         if (employeeHashMap.isEmpty()) {
             System.out.println("Book is empty");
             return 0d;
         }
-        OptionalDouble avarage = employeeHashMap.values().stream()
-                .filter(employee -> employee.getDepartment() == department)
+        OptionalDouble avarage = getDepartmentEmplyeesStream(department)
                 .mapToDouble(Employee::getSalary).average();
         if (avarage.isEmpty()) {
             return 0d;
@@ -212,18 +221,7 @@ public class EmployeeBook {
     }
 
 
-    private Optional<Employee> getMinSalaryFromDepartmentWithStream(Department department) {
-        return employeeHashMap.values().stream()
-                .filter(employee -> employee.getDepartment() == department)
-                .min(Comparator.comparing(Employee::getSalary));
-    }
-
-    private Optional<Employee> getMaxSalaryEmployeeFromDepartmentWithStream(Department department) {
-        return employeeHashMap.values().stream()
-                .filter(employee -> employee.getDepartment() == department)
-                .max(Comparator.comparing(Employee::getSalary));
-    }
-
+        //Other
 
     public Optional<Employee> getEmployeeByID(int id) {
         return Optional.ofNullable(employeeHashMap.get(id));
@@ -268,13 +266,23 @@ public class EmployeeBook {
         printAllEmployeesFromDepartment(department);
     }
 
-
-    //Privates
     private void printAllEmployeesFromDepartment(Department department) {
-        employeeHashMap.values().stream()
-                .filter(employee -> employee.getDepartment() == department)
+        getDepartmentEmplyeesStream(department)
                 .forEach(System.out::println);
     }
+
+
+    //Tools
+    private boolean checkIfNameIsInTheBook(String name)
+    {
+       return employeeHashMap.values().stream().anyMatch(employee -> employee.getEmployeeFullName().equals(name));
+    }
+
+
+    private  Stream<Employee> getDepartmentEmplyeesStream(Department department) {
+        return employeeHashMap.values().stream().filter(employee -> employee.getDepartment() == department);
+    }
+
 
     private double indexSalaryByPercent(double salary, int percent) {
         double index = percent / 100d;

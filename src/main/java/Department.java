@@ -1,5 +1,6 @@
 import java.util.Random;
 
+
 public enum Department {
     DESIGN("Design"),
     PRODUCTION("Production"),

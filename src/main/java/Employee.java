@@ -10,7 +10,7 @@ public class Employee {
     private double salary;
 
 
-    public Employee(String fullName, Department department, int salary) {
+    public Employee(String fullName, Department department, double salary) {
         String[] names = fullName.split(" ");
         this.firstName = names[0];
         this.lastName = names[1];
@@ -79,11 +79,11 @@ public class Employee {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return employeeID == employee.employeeID;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Employee otherEmployee = (Employee) other;
+        return this.hashCode() == otherEmployee.hashCode();
     }
 
     @Override
